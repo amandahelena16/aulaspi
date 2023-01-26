@@ -1,15 +1,15 @@
 package ifrn.pi.eventos.models;
 
-//import javax.persistence.Entity;
-//import javax.persistence.GeneratedValue;
-//import javax.persistence.GenerationType;
-//import javax.persistence.Id;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
-//@Entity
+@Entity
 public class Evento {
 
-//	@Id
-//	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String nome;
 	private String local;
@@ -59,5 +59,12 @@ public class Evento {
 	public void setHorario(String horario) {
 		this.horario = horario;
 	}
+
+	@Override
+	public String toString() {
+		return "Evento [id=" + id + ", nome=" + nome + ", local=" + local + ", data=" + data + ", horario=" + horario
+				+ "]";
+	}
+	
 	
 }
