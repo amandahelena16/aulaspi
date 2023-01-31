@@ -34,10 +34,11 @@ public class EventosController {
 	}
 
 	@GetMapping
-	public String listar() {
+	public ModelAndView listar() {
 		List<Evento> eventos = er.findAll();
 		ModelAndView mv = new ModelAndView("eventos/lista");
 		mv.addObject("eventos", eventos);
+		return mv;
 
-	}
+	}	
 }
