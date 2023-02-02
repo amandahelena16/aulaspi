@@ -35,7 +35,7 @@ public class Convidado {
 	}
 	
 	public String getRg() {
-		return rg;
+		return rg; 
 	}
 	
 	public void setRg(String rg) {
@@ -48,6 +48,7 @@ public class Convidado {
 	
 	public void setEvento(Evento evento) {
 		this.evento = evento;
+		
 	} 
 	
 }
