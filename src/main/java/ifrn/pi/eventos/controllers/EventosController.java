@@ -13,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import ifrn.pi.eventos.models.Convidado;
 import ifrn.pi.eventos.models.Evento;
+import ifrn.pi.eventos.repositories.ConvidadoRepository;
 import ifrn.pi.eventos.repositories.EventoRepository;
 
 @Controller
@@ -20,35 +21,36 @@ import ifrn.pi.eventos.repositories.EventoRepository;
 public class EventosController {
 
 	@Autowired
-	private EventoRepository er;
+	private EventoRepository  er;
+	@Autowired
+	private ConvidadoRepository cr;
 
 	@GetMapping("/form")
 	public String form() {
 		return "eventos/formEvento";
 	}
 
-	@PostMapping("/eventos")
+	@PostMapping
 	public String adicionar(Evento evento) {
 
 		System.out.println(evento);
-		er.save(evento);
+		 er.save(evento);
 
 		return "eventos/evento-adicionado";
 	}
 
 	@GetMapping
 	public ModelAndView listar() {
-		List<Evento> eventos = er.findAll();
+		List<Evento> eventos =  er.findAll();
 		ModelAndView mv = new ModelAndView("eventos/lista");
 		mv.addObject("eventos", eventos);
 		return mv;
-
 	}
 	
 	@GetMapping("/{id}")
 	public ModelAndView detalhar(@PathVariable Long id) {
 		ModelAndView md = new ModelAndView();
-		Optional<Evento> opt = er.findById(id);
+		Optional<Evento> opt =  er.findById(id);
 
 		if (opt.isEmpty()) {
 			md.setViewName("redirect:/eventos");
@@ -59,15 +61,29 @@ public class EventosController {
 		Evento evento = opt.get();
 		md.addObject("evento", evento);
 		
+		List<Convidado> convidados = cr.findByEvento(evento);
+		md.addObject("convidados", convidados);
+		
+		
 		return md;
 	}
 	
-	@PostMapping("/ {id}")
-	public String salvarConvidado(@PathVariable Long id, Convidado convidado) {
-		System.out.println("Id do evento: " + id);
+	@PostMapping("/{idEvento}")
+	public String salvarConvidado(@PathVariable Long idEvento, Convidado convidado) {
+		
+		System.out.println("Id do evento: " + idEvento);
 		System.out.println(convidado);
-		return "redirect:/eventos/{id}";
+		
+		 Optional<Evento> opt = er.findById(idEvento);
+		 if(opt.isEmpty()) {
+			 return "redirect:/eventos";
+			  }
+		 Evento evento = opt.get();
+		 convidado.setEvento(evento);
+		
+		 cr.save(convidado);
+		 
+		return "redirect:/eventos/{idEvento}";
 	}
-	
 	
 }
